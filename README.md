@@ -1,2 +1,3 @@
 # maya_cpp_plugin_test_example
-Simple Maya cpp plugin to serve as a guide for unit and integration tests.
+
+Still in development, I'm trying to make Google Tests and Google Mock to work with Maya c++ plugin but I'm facing some compatibility issues yet.
