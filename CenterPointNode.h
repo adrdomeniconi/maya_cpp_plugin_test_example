@@ -1,5 +1,12 @@
 #pragma once
 
+// Check if we are building the DLL, or using it
+#ifdef CENTER_POINT_CPP_EXPORTS 
+#define CENTER_POINT_API __declspec(dllexport)
+#else
+#define CENTER_POINT_API __declspec(dllimport)
+#endif
+
 #include <vector>
 #include <sstream>
 
@@ -13,29 +20,27 @@
 #include <maya/MMatrix.h>
 #include <maya/MTransformationMatrix.h>
 
-
-class CenterPointNode : public MPxNode
+class CENTER_POINT_API CenterPointNode : public MPxNode
 {
-
 public:
-	CenterPointNode();
+    CenterPointNode();
+    virtual ~CenterPointNode() override;
 
-	virtual MStatus compute(const MPlug& plug, MDataBlock& data) override;
+    virtual MStatus compute(const MPlug& plug, MDataBlock& data) override;
 
-	static void* Creator();
-	static MStatus Initialize();
+    static void* Creator();
+    static MStatus Initialize();
 
-	static MTypeId GetTypeId();
-	static MString GetTypeName();
+    static MTypeId GetTypeId();
+    static MString GetTypeName();
 
-	virtual ~CenterPointNode() override;
+    static MObject inputObjectsAttr;
+    static MObject outputPosAttr;
+
+    MVector findCenterPoint(std::vector<MVector> positions);
 
 private:
-	static void defineAttributes();
+    static void defineAttributes();
 
-	bool isDirty(const MPlug& plug);
-	MVector findCenterPoint(std::vector<MVector> positions);
-
-	static MObject inputObjectsAttr;
-	static MObject outputPosAttr;
+    bool isDirty(const MPlug& plug);
 };

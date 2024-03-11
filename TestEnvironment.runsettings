@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<RunConfiguration>
+		<EnvironmentVariables>
+			<!-- Add both bin and bin3 directories to the PATH -->
+			<PATH>D:\Autodesk\Maya2022\bin;D:\Autodesk\Maya2022\bin3;$(PATH)</PATH>
+		</EnvironmentVariables>
+	</RunConfiguration>
+</RunSettings>
