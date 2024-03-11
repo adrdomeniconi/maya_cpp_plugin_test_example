@@ -1,10 +1,16 @@
-# Maya cpp plugin test example
+# Maya C++ Plugin Test Example
 
-### Introduction
+## Introduction
 
-Although testing is a fundamental part of software development and widely adopted across various industries, it seems that studios haven't yet fully embraced testing practices. The goal of this short tutorial is to walk you through configuring Google Test and Google Mock for Maya C++ Plugins in Visual Studio, using Maya 2022.5 for demonstration. When working with Maya C++ plugins, setting up a proper testing environment can save you time and headaches. Knowing how to properly configure this environment is a crucial first step.
+This repository is designed to guide individuals with no or little experience in using Google Test in Visual Studio to test Maya C++ plugins. This guide assumes that you are working with Maya 2022.5 or superior, but the principles are applicable to other versions with some adjustments.
 
-### Prerequisites
+## Plugin Overview
+
+The plugin featured in this repository is a simple utility designed for Autodesk Maya. It creates a custom Maya node that calculates the center point among a list of object positions. The positions are provided using the world matrix of each object. Although there are alternative methods to achieve this in Maya, the purpose of this plugin is to offer a straightforward example to demonstrate the testing process of Maya Python plugins with pytest and mocks.
+
+This plugin serves as an illustrative example for those learning how to test Maya Python plugins, emphasizing the simplicity and directness of the process rather than the practicality of the plugin itself.
+
+## Requirements
 
 Before we dive into the configurations, ensure you have the following:
 
@@ -12,14 +18,9 @@ Before we dive into the configurations, ensure you have the following:
 - Visual Studio with C++ development tools installed.
 - A basic understanding of C++ and Maya plugin development.
 
-### Step 1: Initial Setup
+### Step 1: Install Google Test and Google Mock
 
-Ensure you have a working Maya C++ plugin project in Visual Studio. If you're encountering issues or starting from scratch, refer to an external tutorial for setting up a Maya plugin project in Visual Studio (I'm planning to add a tutorial for that soon). This setup is crucial as our test configuration builds upon a correctly configured plugin project.
-
-### Step 2: Creating a Test Project
-
-1. **Create a New Project**: In the same Visual Studio solution as your plugin project, add a new project dedicated to testing.
-2. **Install Google Test and Google Mock**: Use NuGet to install a Google Test package that preferably includes Google Mock, such as "google-testmock by Google Inc.".
+2. **Nuget package install**: Use NuGet to install a Google Test package that preferably includes Google Mock, such as "google-testmock by Google Inc.".
 3. **Verify Installation**: Write a simple test to ensure your setup is correctly configured:
 
 ```cpp
@@ -44,7 +45,7 @@ Linking your test project with the plugin project is mandatory for integrated te
 
 #### 3.1 Project Configuration
 
-For the test project to work with the Maya plugin, you must **replicate the plugin project's configuration** but adding a few new steps:
+For the test project to work with the Maya plugin, you must **update the plugin configurations and replicate the plugin project's configuration on the testing project** adding a few new steps:
 
 - **Architecture**: Use only the x64 configuration. Avoid x86 to ensure compatibility with Maya.
 - **General Settings**:
@@ -104,36 +105,11 @@ your_test_executable.exe
 
 This approach ensures a consistent environment for your tests, whether run from Visual Studio or the command line.
 
-### Step 4: Modifying the Plugin Project for Testing
-
-To link the plugin DLL with the test project correctly, you need to modify the implementation project:
-
-- **Exporting Classes**: The `__declspec(dllexport)` and `__declspec(dllimport)` annotations enable classes and functions to be exported from the DLL or imported into another project. This distinction is necessary for the linker to know which symbols to export from the DLL and which to expect to be present in the consumer (the test project, in this case).
-
-```cpp
-#ifdef EXPORTING_MY_PLUGIN_DLL
-#define MY_PLUGIN_DLL __declspec(dllexport)
-#else
-#define MY_PLUGIN_DLL __declspec(dllimport)
-#endif
-```
-
-- **Use the Macro**: In your plugin's header files, use the `MY_PLUGIN_DLL` macro to decorate classes and functions that should be exported:
-
-```cpp
-class MY_PLUGIN_DLL MyPluginClass : public MPxNode {
-public:
-    // Other members...
-};
-```
-
-- **Configure Preprocessor Definitions**: Add `EXPORTING_MY_PLUGIN_DLL` to the preprocessor definitions in your plugin project's settings for both Debug and Release configurations. This setup informs the compiler which symbols to export, facilitating their use in the test project.
-
-### Step 5: Writing and Running Your Tests
+### Step 4: Writing and Running Your Tests
 
 Now that your environment is set up and your projects are linked, it's time to write tests that utilize the OpenMaya libraries, mirroring the functionality used in your plugin.
 
-#### 5.1 Creating a Test Function
+#### 4.1 Creating a Test Function
 
 Let's create a simple test function that uses the OpenMaya library to demonstrate how you can test your Maya plugin. This test will instantiate a class from your plugin (just to make sure that it will not throw errors) and perform a basic operation using the OpenMaya library.
 
@@ -155,7 +131,7 @@ TEST(MyPluginTests, TestVectorMagnitude) {
 
 In this test, we instantiate myPlugin and an `MVector` object, which is part of Maya's OpenMaya API. We then calculate its magnitude and use `ASSERT_NEAR` to check if the magnitude is as expected, within a small margin of error.
 
-#### 5.2 Verifying Tests in Test Explorer
+#### 4.2 Verifying Tests in Test Explorer
 
 After writing your test, build your test project in Visual Studio. To check if your tests are recognized:
 
@@ -163,7 +139,7 @@ After writing your test, build your test project in Visual Studio. To check if y
 2. After building, Test Explorer should refresh and display your newly created test under the test project's listing.
 3. If you don't see your test, try rebuilding the solution or checking the output window for any build errors that might prevent the test from being discovered.
 
-#### 5.3 Running the Tests
+#### 4.3 Running the Tests
 
 To run your tests:
 
