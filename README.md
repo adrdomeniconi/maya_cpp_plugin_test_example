@@ -18,7 +18,7 @@ Before we dive into the configurations, ensure you have the following:
 - Visual Studio with C++ development tools installed.
 - A basic understanding of C++ and Maya plugin development.
 
-### Step 1: Install Google Test and Google Mock
+### Step 1: Install Google Test and Google Mock on the Test Project
 
 2. **Nuget package install**: Use NuGet to install a Google Test package that preferably includes Google Mock, such as "google-testmock by Google Inc.".
 3. **Verify Installation**: Write a simple test to ensure your setup is correctly configured:
