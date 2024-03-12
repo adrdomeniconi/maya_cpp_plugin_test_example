@@ -21,10 +21,11 @@ TEST(TestCenterPointNode, TestFindCenterPoint)
 
     MVector expectedResult(4.850, 14.740, -6.050);
     MVector actualResult = centerPointNode.findCenterPoint(inputPositions);
-
-    ASSERT_NEAR(expectedResult.x, actualResult.x, 0.01);
-    ASSERT_NEAR(expectedResult.y, actualResult.y, 0.01);
-    ASSERT_NEAR(expectedResult.z, actualResult.z, 0.01);
+    
+    float tolerance = 0.01f;
+    ASSERT_NEAR(expectedResult.x, actualResult.x, tolerance);
+    ASSERT_NEAR(expectedResult.y, actualResult.y, tolerance);
+    ASSERT_NEAR(expectedResult.z, actualResult.z, tolerance);
 
 }
 
